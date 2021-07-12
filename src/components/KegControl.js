@@ -11,8 +11,6 @@ class KegControl extends React.Component {
     super(props);
     this.state = {
       formVisibleOnPage: false,
-      masterKegList: [],
-      // ^ will be passed down as a prop to KegList in the render() else-branch
       selectedKeg: null,
       editing: false
     };
@@ -39,10 +37,22 @@ class KegControl extends React.Component {
   }
 
   handleAddingNewKegToList = (newKeg) => {
-    const newMasterKegList = this.state.masterKegList.concat(newKeg);
+    const { dispatch } = this.props;
+    const { id, name, brand, price, alcoholContent, pintsLeft } = newKeg;
+    const action = {
+      type: 'ADD_KEG',
+      id: id,
+      name: name,
+      brand: brand,
+      price: price,
+      alcoholContent: alcoholContent,
+      pintsLeft: pintsLeft,
+    }
+    dispatch(action);
     this.setState({
-      masterKegList: newMasterKegList,
       formVisibleOnPage: false
+      // ^ needs to be moved to the Redux store per project objectives
+      // Not shown in the lesson: https://www.learnhowtoprogram.com/react/react-with-redux/adding-redux-to-react-part-2
     });
   }
 
@@ -52,22 +62,32 @@ class KegControl extends React.Component {
   }
 
   handleEditingKegInList = (kegToEdit) => {
-    const editedMasterKegList = this.state.masterKegList
-      .filter(keg => keg.id !== this.state.selectedKeg.id)
-      .concat(kegToEdit);
+    const { dispatch } = this.props;
+    const { id, name, brand, price, alcoholContent, pintsLeft } = kegToEdit;
+    const action = {
+      type: 'ADD_KEG',
+      id: id,
+      name: name,
+      brand: brand,
+      price: price,
+      alcoholContent: alcoholContent,
+      pintsLeft: pintsLeft,
+    }
+    dispatch(action);
     this.setState({
-      masterKegList: editedMasterKegList,
       editing: false,
       selectedKeg: null
     });
   }
 
   handleDeletingKeg = (id) => {
-    const newMasterKegList = this.state.masterKegList.filter(keg => keg.id !== id);
-    this.setState({
-      masterKegList: newMasterKegList,
-      selectedKeg: null
-    });
+    const { dispatch } = this.props;
+    const action = {
+      type: 'DELETE_KEG',
+      id: id
+    }
+    dispatch(action);
+    this.setState({selectedKeg: null});
   }
 
   handleSellingKeg = (id) => {
