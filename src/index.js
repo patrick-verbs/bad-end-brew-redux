@@ -1,8 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+
+import { createStore } from 'redux';
+import reducer from './reducers/keg-list-reducer';
+
 import './index.css';
 import App from './components/App';
 import reportWebVitals from './reportWebVitals';
+
+const store = createStore(reducer);
 
 ReactDOM.render(
   <React.StrictMode>
